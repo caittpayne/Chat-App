@@ -19,21 +19,33 @@ class RoomList extends Component {
     });
   }
 
+  createRooms(newRoomName) {
+    this.roomsRef.push({
+      name: newRoomName
+    });
 
+    document.getElementById('new').value='';
+
+  }
 
   render() {
     return (
-      <section className='roomList'>
-      {
-        this.state.rooms.map((room, index) =>
-          <div key={index}>{room.name}</div>
-        )
-      }
+      <section>
+        <section className='roomList'>
+        {
+          this.state.rooms.map((room, index) =>
+            <div key={index}>{room.name}</div>
+          )
+        }
+        </section>
+        <section>
+          <form>
+            <input type='text' id='new'/>
+            <button type='button' onClick={() => this.createRooms(document.getElementById('new').value)}>Create</button>
+          </form>
+        </section>
       </section>
     )
-
-
-
   }
 }
 
