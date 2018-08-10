@@ -23,7 +23,6 @@ class RoomList extends Component {
     }
 
     render() {
-      console.log(this.state.messages)
       return (
         <section>
           <section className={this.props.activeRoom === 'undefined' ? 'hide' : 'roomName'}>
