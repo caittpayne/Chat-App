@@ -23,9 +23,7 @@ class RoomList extends Component {
     this.roomsRef.push({
       name: newRoomName
     });
-
     document.getElementById('new').value='';
-
   }
 
   render() {
@@ -34,7 +32,7 @@ class RoomList extends Component {
         <section className='roomList'>
         {
           this.state.rooms.map((room, index) =>
-            <div key={index}>{room.name}</div>
+            <div key={index} onClick={() => this.props.roomClick(room.key, room.name)}>{room.name}</div>
           )
         }
         </section>
