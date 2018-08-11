@@ -10,17 +10,26 @@ class RoomList extends Component {
 
     this.messagesRef = this.props.firebase
       .database()
-      .ref('rooms')
+      .ref('messages')
   }
 
     componentDidMount() {
       this.messagesRef.on('child_added', snapshot => {
-        snapshot.forEach(messageSnapshot => {
-          const message = messageSnapshot.val();
-          this.setState({ messages: this.state.messages.concat( message )})
-        });
+        const message = snapshot.val();
+        this.setState({ messages: this.state.messages.concat( message )})
       });
     }
+
+      sendMessage(newMessage) {
+        this.messagesRef.push({
+          content: newMessage,
+          roomId: this.props.activeRoomId,
+          sentAt: this.props.firebase.database.ServerValue.TIMESTAMP,
+          username: this.props.user.displayName
+        });
+
+        document.getElementById('newText').value='';
+      }
 
     render() {
       return (
@@ -31,7 +40,7 @@ class RoomList extends Component {
           <section className='messageList'>
           {
             this.state.messages
-              .filter(message => message.roomId == this.props.activeRoomId)
+              .filter(message => message.roomId === this.props.activeRoomId)
               .map((message, index) =>
                 <div key={index}>
                   <p>{message.username}</p>
@@ -40,6 +49,12 @@ class RoomList extends Component {
                   </div>
                 )
               }
+          </section>
+          <section className='send'>
+            <form>
+              <input type='text' id='newText'/>
+              <button type='button' onClick={() => this.sendMessage(document.getElementById('newText').value)}>Send</button>
+            </form>
           </section>
         </section>
       )
