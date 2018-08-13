@@ -38,10 +38,16 @@ class RoomList extends Component {
       }
 
       editMessage(message, data) {
-      this.messagesRef.child(message.key).update({ content: data });
+      const newArr = [...this.state.messages];
+      const index = newArr.indexOf(message);
+      newArr[index].content = data;
 
-      this.setState({ edit: 'hideEdit' });
-      }
+      this.messagesRef.child(message.key).update({ content: data });
+      this.setState({
+        messages: newArr,
+        edit: 'hideEdit'
+      });
+    }
 
       deleteMessage(message, index) {
         const newList = [...this.state.messages];
@@ -96,11 +102,11 @@ class RoomList extends Component {
                   <div>
                   <section className='editMessage'>
                     <button onClick={() => this.openEdit()}>Edit</button>
-                    <button onClick={() => this.deleteMessage()}>Delete</button>
+                    <button onClick={() => this.deleteMessage(message)}>Delete</button>
                   </section>
                     <form className={this.state.edit}>
-                      <input type='text' id='edit' defaultValue={message.content} />
-                      <button type='button' onClick={() => this.editMessage(message, document.getElementById('edit').value)}>Submit</button>
+                      <input type='text' id={message.key} defaultValue={message.content} />
+                      <button type='button' onClick={() => this.editMessage(message, document.getElementById(message.key).value)}>Submit</button>
                     </form>
                   </div>
                   </div>

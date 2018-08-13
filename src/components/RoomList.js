@@ -5,7 +5,7 @@ class RoomList extends Component {
     super(props);
 
     this.state = {
-      rooms: []
+      rooms: [],
     };
 
     this.roomsRef = this.props.firebase.database().ref('rooms');
@@ -26,13 +26,47 @@ class RoomList extends Component {
     document.getElementById('new').value='';
   }
 
+  openEdit() {
+    //set class to show edit
+  }
+
+  editRooms(room, data) {
+    const array = [...this.state.rooms];
+    const i = array.indexOf(room);
+    array[i].name = data;
+
+    console.log(array[i].name);
+    console.log(data);
+    console.log(i);
+
+    this.roomsRef.child(room.key).update({ name: data });
+    this.setState({
+      rooms: array
+    });
+  }
+
+  deleteRooms(room, index) {
+      const newList = [...this.state.rooms];
+      this.roomsRef.child(room.key).remove();
+      newList.splice(index, 1);
+      this.setState({ rooms: newList });
+  }
+
   render() {
     return (
       <section>
         <section className='roomList'>
         {
           this.state.rooms.map((room, index) =>
-            <div key={index} onClick={() => this.props.roomClick(room.key, room.name)}>{room.name}</div>
+            <section key={index}>
+              <div onClick={() => this.props.roomClick(room.key, room.name)}>{room.name}</div>
+              <button onClick={() => this.openRoomEdit()}>Edit</button>
+              <section className='roomEditForm'>
+                <input type='text' defaultValue={room.name} id={room.key}/>
+                <button type='button' onClick={() => this.editRooms(room, document.getElementById(room.key).value)}>Submit</button>
+                <button type='button' onClick={() => this.deleteRooms(room, index)}>Delete</button>
+              </section>
+            </section>
           )
         }
         </section>
