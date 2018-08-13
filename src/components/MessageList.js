@@ -31,6 +31,35 @@ class RoomList extends Component {
         document.getElementById('newText').value='';
       }
 
+      formatTime(time) {
+        var date = new Date(time),
+          yyyy = date.getFullYear(),
+          mm = ('0' + (date.getMonth() + 1)).slice(-2),
+          dd = ('0' + date.getDate()).slice(-2),
+          hh = date.getHours(),
+          h = hh,
+          min = ('0' + date.getMinutes()).slice(-2),
+          ampm = 'AM',
+          time;
+
+
+        if (hh > 12) {
+          h = hh -12;
+          ampm = 'PM';
+        }
+        else if (hh === 12) {
+          h = 12;
+          ampm = 'PM'
+        }
+        else if (hh === 0) {
+          h = 12;
+        }
+
+        time = yyyy + '-' + mm + '-' + dd + ','+ ' ' + h + ':' + min + ' ' + ampm;
+
+        return time;
+      }
+
     render() {
       return (
         <section>
@@ -45,7 +74,7 @@ class RoomList extends Component {
                 <div key={index}>
                   <p>{message.username}</p>
                   <p>{message.content}</p>
-                  <p>{message.sentAt}</p>
+                  <p>{this.formatTime(message.sentAt)}</p>
                   </div>
                 )
               }
