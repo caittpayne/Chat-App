@@ -5,7 +5,8 @@ class RoomList extends Component {
     super(props);
 
     this.state= {
-      messages: []
+      messages: [],
+      edit: 'hideEdit'
     }
 
     this.messagesRef = this.props.firebase
@@ -16,6 +17,7 @@ class RoomList extends Component {
     componentDidMount() {
       this.messagesRef.on('child_added', snapshot => {
         const message = snapshot.val();
+        message.key = snapshot.key;
         this.setState({ messages: this.state.messages.concat( message )})
       });
     }
@@ -31,6 +33,23 @@ class RoomList extends Component {
         document.getElementById('newText').value='';
       }
 
+      openEdit() {
+        this.setState({ edit: 'showEdit' })
+      }
+
+      editMessage(message, data) {
+      this.messagesRef.child(message.key).update({ content: data });
+
+      this.setState({ edit: 'hideEdit' });
+      }
+
+      deleteMessage(message, index) {
+        const newList = [...this.state.messages];
+        this.messagesRef.child(message.key).remove();
+        newList.splice(index, 1);
+        this.setState({ messages: newList });
+      }
+
       formatTime(time) {
         var date = new Date(time),
           yyyy = date.getFullYear(),
@@ -39,8 +58,7 @@ class RoomList extends Component {
           hh = date.getHours(),
           h = hh,
           min = ('0' + date.getMinutes()).slice(-2),
-          ampm = 'AM',
-          time;
+          ampm = 'AM';
 
 
         if (hh > 12) {
@@ -75,6 +93,16 @@ class RoomList extends Component {
                   <p>{message.username}</p>
                   <p>{message.content}</p>
                   <p>{this.formatTime(message.sentAt)}</p>
+                  <div>
+                  <section className='editMessage'>
+                    <button onClick={() => this.openEdit()}>Edit</button>
+                    <button onClick={() => this.deleteMessage()}>Delete</button>
+                  </section>
+                    <form className={this.state.edit}>
+                      <input type='text' id='edit' defaultValue={message.content} />
+                      <button type='button' onClick={() => this.editMessage(message, document.getElementById('edit').value)}>Submit</button>
+                    </form>
+                  </div>
                   </div>
                 )
               }
