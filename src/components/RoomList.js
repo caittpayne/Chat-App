@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import './main.css';
 
 class RoomList extends Component {
   constructor(props) {
@@ -54,7 +55,7 @@ class RoomList extends Component {
 
   render() {
     return (
-      <section>
+      <section className={this.props.hide}>
         <section className='roomList'>
         {
           this.state.rooms.map((room, index) =>

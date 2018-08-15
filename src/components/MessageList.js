@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import './main.css';
 
 class RoomList extends Component {
   constructor(props) {
@@ -20,6 +21,15 @@ class RoomList extends Component {
         message.key = snapshot.key;
         this.setState({ messages: this.state.messages.concat( message )})
       });
+    }
+
+    hideMessages() {
+      if(this.props.user) {
+        return 'show';
+      }
+      else {
+        return 'hide';
+      }
     }
 
       sendMessage(newMessage) {
@@ -86,7 +96,7 @@ class RoomList extends Component {
 
     render() {
       return (
-        <section>
+        <section className={this.props.hide}>
           <section className={this.props.activeRoom === 'undefined' ? 'hide' : 'roomName'}>
             <h2>{this.props.activeRoomName}</h2>
           </section>
@@ -113,7 +123,7 @@ class RoomList extends Component {
                 )
               }
           </section>
-          <section className='send'>
+          <section>
             <form>
               <input type='text' id='newText'/>
               <button type='button' onClick={() => this.sendMessage(document.getElementById('newText').value)}>Send</button>

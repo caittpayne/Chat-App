@@ -1,0 +1,75 @@
+/* Hide or display Components */
+.hide {
+  display: none;
+}
+
+.show {
+  display: block;
+}
+
+.fadeOut {
+  visibility: hidden;
+  opacity: 0;
+  transition: visibility 0.5s linear, opacity 0.5s linear;
+}
+
+.fadeIn {
+visibility: visible;
+opacity: 1;
+}
+
+/* User Component */
+h1 {
+  font-size: 3.5em;
+}
+
+.landing {
+  background: linear-gradient(180deg, #F1F54D 45%, #fff 45%);
+  height: 100vh;
+}
+
+.greetContainer {
+  height: 80vh;
+  text-align: center;
+}
+
+.signInForm {
+  height: 80vh;
+  text-align: center;
+  color: #414A6B;
+}
+
+/* Greeting Colors */
+
+#item1, #item5 {
+  color: #414A6B;
+}
+
+#item2, #item4 {
+  color: #49C5B6;
+}
+
+#item3 {
+  color: #FF5850;
+}
+
+/* Sign In */
+.signRow {
+  padding: 10px 0px 0px 0px;
+}
+
+.faRow {
+  padding: 0px 0px 30px 0px;
+}
+
+.far {
+  color: #49C5B6;
+}
+
+.button {
+  background-color: #FF5850;
+  color: white;
+  width: 200px;
+  border-width: 0px;
+  border-radius: 24px;
+}
