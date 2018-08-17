@@ -1,10 +1,10 @@
 
 import React, { Component } from 'react';
+import { Container, Row, Col, Button } from 'reactstrap';
 import * as firebase from 'firebase';
 import Key from './config.js';
-import RoomList from './components/RoomList';
-import MessageList from './components/MessageList';
-import User from './components/User';
+import SignIn from './components/SignIn/SignIn';
+import ChatRoom from './components/ChatRoom/ChatRoom';
 import logo from './logo.svg';
 import './App.css';
 import { library } from '@fortawesome/fontawesome-svg-core';
@@ -21,19 +21,21 @@ class App extends Component {
     super(props);
 
     this.state={
-      activeRoomId: 'undefined',
-      activeRoomName: '',
       user: '',
-      hide: 'hide'
+      hideChatRoom: 'hide',
+      hideSignIn: 'show'
     }
 
   }
 
-  roomClick(room, roomName) {
-    this.setState({
-      activeRoomId: room,
-      activeRoomName: roomName
-    })
+  signIn() {
+    const provider = new firebase.auth.GoogleAuthProvider();
+    firebase.auth().signInWithPopup( provider );
+  }
+
+  signOut() {
+    const provider = new firebase.auth.GoogleAuthProvider();
+    firebase.auth().signOut();
   }
 
   setUser(user) {
@@ -41,38 +43,37 @@ class App extends Component {
       user: user,
     })
         if(this.state.user !== null) {
-          this.setState({ hide: 'show'})
-          console.log(this.state.user)
+          this.setState({
+            hideChatRoom: 'show',
+            hideSignIn: 'hide'
+          })
         }
         else {
-          this.setState({ hide: 'hide'})
+          this.setState({
+            hideChatRoom: 'hide',
+            hideSignIn: 'show'
+          })
         }
   }
 
   render() {
     return (
-      <section>
-        <RoomList
+      <div>
+        <SignIn
+          firebase={firebase}
+          setUser={(user) => this.setUser(user)}
+          user={this.state.user}
+          hideChat={this.state.hideChatRoom}
+          hideLogin={this.state.hideSignIn}
+          signIn={() => this.signIn()}
+        />
+        <ChatRoom
           firebase={firebase}
           user={this.state.user}
-          hide={this.state.hide}
-          activeRoomId={this.state.activeRoomId}
-          roomClick={(room, roomName) => this.roomClick(room, roomName)}
+          hideChat={this.state.hideChatRoom}
+          signOut={() => this.signOut()}
         />
-        <MessageList
-          firebase={firebase}
-          hide={this.state.hide}
-          activeRoomId={this.state.activeRoomId}
-          activeRoomName={this.state.activeRoomName}
-          user={this.state.user}
-        />
-        <User
-        firebase={firebase}
-        setUser={(user) => this.setUser(user)}
-        user={this.state.user}
-        hide={this.state.hide}
-         />
-      </section>
+      </div>
     )
   }
 }

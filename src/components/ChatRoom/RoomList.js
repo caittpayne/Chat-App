@@ -1,4 +1,8 @@
 import React, { Component } from 'react';
+import { Container, Row, Col, Button } from 'reactstrap';
+import ModalEditRoom from './Modal/ModalEditRoom';
+import ModalAddRoom from './Modal/ModalAddRoom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import './main.css';
 
 class RoomList extends Component {
@@ -27,18 +31,10 @@ class RoomList extends Component {
     document.getElementById('new').value='';
   }
 
-  openEdit() {
-    //set class to show edit
-  }
-
   editRooms(room, data) {
     const array = [...this.state.rooms];
     const i = array.indexOf(room);
     array[i].name = data;
-
-    console.log(array[i].name);
-    console.log(data);
-    console.log(i);
 
     this.roomsRef.child(room.key).update({ name: data });
     this.setState({
@@ -55,29 +51,34 @@ class RoomList extends Component {
 
   render() {
     return (
-      <section className={this.props.hide}>
-        <section className='roomList'>
+      <Container>
+        <Row>
+        <Row>
+          <Col><h4>Channels</h4></Col>
+        </Row>
         {
           this.state.rooms.map((room, index) =>
-            <section key={index}>
+            <Container key={index}>
               <div onClick={() => this.props.roomClick(room.key, room.name)}>{room.name}</div>
-              <button onClick={() => this.openRoomEdit()}>Edit</button>
-              <section className='roomEditForm'>
-                <input type='text' defaultValue={room.name} id={room.key}/>
-                <button type='button' onClick={() => this.editRooms(room, document.getElementById(room.key).value)}>Submit</button>
-                <button type='button' onClick={() => this.deleteRooms(room, index)}>Delete</button>
-              </section>
-            </section>
+              <div>
+                <ModalEditRoom
+                  room={room}
+                  index={index}
+                  roomName={room.name}
+                  roomKey={room.key}
+                  editRooms={() => this.editRooms(room, document.getElementById(room.key).value)}
+                  deleteRooms={() => this.deleteRooms(room, index)}
+                />
+              </div>
+            </Container>
           )
         }
-        </section>
-        <section>
-          <form>
-            <input type='text' id='new'/>
-            <button type='button' onClick={() => this.createRooms(document.getElementById('new').value)}>Create</button>
-          </form>
-        </section>
-      </section>
+        </Row>
+        <Row>
+          <ModalAddRoom
+            createRooms={() => this.createRooms(document.getElementById('new').value)}/>
+        </Row>
+      </Container>
     )
   }
 }

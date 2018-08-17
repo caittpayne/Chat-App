@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
+import ModalMessage from './Modal/ModalMessage';
 import './main.css';
 
-class RoomList extends Component {
+class MessageList extends Component {
   constructor(props) {
     super(props);
 
@@ -23,15 +24,6 @@ class RoomList extends Component {
       });
     }
 
-    hideMessages() {
-      if(this.props.user) {
-        return 'show';
-      }
-      else {
-        return 'hide';
-      }
-    }
-
       sendMessage(newMessage) {
         this.messagesRef.push({
           content: newMessage,
@@ -48,14 +40,13 @@ class RoomList extends Component {
       }
 
       editMessage(message, data) {
-      const newArr = [...this.state.messages];
-      const index = newArr.indexOf(message);
-      newArr[index].content = data;
+        const newArr = [...this.state.messages];
+        const index = newArr.indexOf(message);
+        newArr[index].content = data;
 
-      this.messagesRef.child(message.key).update({ content: data });
-      this.setState({
-        messages: newArr,
-        edit: 'hideEdit'
+        this.messagesRef.child(message.key).update({ content: data });
+        this.setState({
+          messages: newArr,
       });
     }
 
@@ -75,8 +66,6 @@ class RoomList extends Component {
           h = hh,
           min = ('0' + date.getMinutes()).slice(-2),
           ampm = 'AM';
-
-
         if (hh > 12) {
           h = hh -12;
           ampm = 'PM';
@@ -88,7 +77,6 @@ class RoomList extends Component {
         else if (hh === 0) {
           h = 12;
         }
-
         time = yyyy + '-' + mm + '-' + dd + ','+ ' ' + h + ':' + min + ' ' + ampm;
 
         return time;
@@ -96,7 +84,7 @@ class RoomList extends Component {
 
     render() {
       return (
-        <section className={this.props.hide}>
+        <section>
           <section className={this.props.activeRoom === 'undefined' ? 'hide' : 'roomName'}>
             <h2>{this.props.activeRoomName}</h2>
           </section>
@@ -110,16 +98,15 @@ class RoomList extends Component {
                   <p>{message.content}</p>
                   <p>{this.formatTime(message.sentAt)}</p>
                   <div>
-                  <section className='editMessage'>
-                    <button onClick={() => this.openEdit()}>Edit</button>
-                    <button onClick={() => this.deleteMessage(message)}>Delete</button>
-                  </section>
-                    <form className={this.state.edit}>
-                      <input type='text' id={message.key} defaultValue={message.content} />
-                      <button type='button' onClick={() => this.editMessage(message, document.getElementById(message.key).value)}>Submit</button>
-                    </form>
+                    <section className='editMessage'>
+                      <ModalMessage
+                        message={message}
+                        messageKey={message.key}
+                        messageContent={message.content}
+                        editMessage={() => this.editMessage(message, document.getElementById(message.key).value)} />
+                    </section>
                   </div>
-                  </div>
+                </div>
                 )
               }
           </section>
@@ -134,4 +121,4 @@ class RoomList extends Component {
     }
 }
 
-export default RoomList
+export default MessageList;

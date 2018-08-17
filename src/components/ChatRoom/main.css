@@ -1,0 +1,18 @@
+#chatContainer {
+  background-color: white;
+  height: 100vh;
+}
+
+/* Room List */
+
+#rooms {
+  background-color: #414A6B;
+  color: white;
+  height: 100vh;
+}
+
+/* Message List */
+
+#messages {
+  background-color: white;
+}

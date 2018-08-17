@@ -23,7 +23,7 @@ h1 {
   font-size: 3.5em;
 }
 
-.landing {
+#landing {
   background: linear-gradient(180deg, #F1F54D 45%, #fff 45%);
   height: 100vh;
 }

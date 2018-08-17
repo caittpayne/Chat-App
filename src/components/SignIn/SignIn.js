@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
 import { Container, Row, Col, Button } from 'reactstrap';
 import './main.css';
-import './../App.js';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 
-class User extends Component {
+class SignIn extends Component {
   constructor(props) {
     super(props);
 
@@ -18,25 +17,6 @@ class User extends Component {
       this.props.setUser(user);
     });
     this.fade();
-  }
-
-  signIn() {
-    const provider = new this.props.firebase.auth.GoogleAuthProvider();
-    this.props.firebase.auth().signInWithPopup( provider );
-  }
-
-  signOut() {
-    const provider = new this.props.firebase.auth.GoogleAuthProvider();
-    this.props.firebase.auth().signOut();
-  }
-
-  displayUsername() {
-    if(this.props.user) {
-      return <h3>{this.props.user.displayName}</h3>
-    }
-    else {
-      return <h3>Guest</h3>
-    }
   }
 
   fade() {
@@ -70,16 +50,7 @@ hideGreetings() {
 
   render() {
     return(
-
-      <Container className='landing' fluid='true'>
-
-        <Container className={this.props.hide}>
-          <Row>
-            <Col><button id='signOut' onClick={() => this.signOut()}>Sign Out</button></Col>
-            <Col>{this.displayUsername()}</Col>
-          </Row>
-        </Container>
-
+      <Container className={this.props.hideLogin} id='landing' fluid='true'>
         <Container id='greetings'>
           <Row className='align-items-center greetContainer'>
             <Col lg='12'>
@@ -107,15 +78,14 @@ hideGreetings() {
                   <Col><h3>Sign in to join the conversation.</h3></Col>
                 </Row>
                 <Row className='align-items-center signRow'>
-                  <Col><Button className='button .btn-round' onClick={() => this.signIn()}>Sign In</Button></Col>
+                  <Col><Button className='button .btn-round' onClick={() => this.props.signIn()}>Sign In</Button></Col>
                 </Row>
               </Col>
             </Row>
           </Container>
       </Container>
-
     )
   }
 }
 
-export default User
+export default SignIn;
