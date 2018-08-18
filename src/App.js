@@ -7,7 +7,14 @@ import ChatRoom from './components/ChatRoom/ChatRoom';
 import './App.css';
 
 // Initialize Firebase
-var config = Key;
+var config =  {
+   apiKey: "AIzaSyBLukQvoFO_SkxrpflRE1RX8iceeENdhCQ",
+   authDomain: "bloc-chat-react-4cbb2.firebaseapp.com",
+   databaseURL: "https://bloc-chat-react-4cbb2.firebaseio.com",
+   projectId: "bloc-chat-react-4cbb2",
+   storageBucket: "bloc-chat-react-4cbb2.appspot.com",
+   messagingSenderId: "325252341280"
+ };
 
 firebase.initializeApp(config);
 
