@@ -1,5 +1,6 @@
 import React, { Component }from 'react';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import { Button, Modal, ModalBody } from 'reactstrap';
+import './main.css';
 
 class ModalAddRoom extends Component {
   constructor(props) {
@@ -24,14 +25,14 @@ class ModalAddRoom extends Component {
 
   render() {
     return (
-      <div>
-        <Button onClick={this.toggle}>Create</Button>
+      <div className='createContainer'>
+        <Button className='modalButton' onClick={this.toggle}>Create New</Button>
         <Modal isOpen={this.state.modal} toggle={this.toggle} >
-          <ModalBody>
+          <ModalBody className='modalContainer'>
             <form>
-              <input type='text' id='new' />
+              <input className='formInput' type='text' id='new' />
             </form>
-            <Button onClick={() => {{this.handleClick()}; {this.props.createRooms(document.getElementById('new').value)}}}>Create</Button>
+            <Button className='modalButton' onClick={() => {this.handleClick(); this.props.createRooms(document.getElementById('new').value)}}>Create</Button>
           </ModalBody>
         </Modal>
       </div>

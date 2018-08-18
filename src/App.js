@@ -1,15 +1,10 @@
 
 import React, { Component } from 'react';
-import { Container, Row, Col, Button } from 'reactstrap';
 import * as firebase from 'firebase';
 import Key from './config.js';
 import SignIn from './components/SignIn/SignIn';
 import ChatRoom from './components/ChatRoom/ChatRoom';
-import logo from './logo.svg';
 import './App.css';
-import { library } from '@fortawesome/fontawesome-svg-core';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-
 
 // Initialize Firebase
 var config = Key;

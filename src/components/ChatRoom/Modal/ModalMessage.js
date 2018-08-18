@@ -1,5 +1,6 @@
 import React, { Component }from 'react';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import { Container, Button, Modal, ModalBody } from 'reactstrap';
+import './main.css';
 
 class ModalMessage extends Component {
   constructor(props) {
@@ -27,10 +28,14 @@ class ModalMessage extends Component {
       <div>
         <div><i className='fas fa-pencil-alt' onClick={this.toggle}></i></div>
         <Modal isOpen={this.state.modal} toggle={this.toggle} >
-          <ModalBody>
-          <input type='text' defaultValue={this.props.messageContent} id={this.props.messageKey}/>
-          <button type='button' onClick={() =>{{this.handleClick()}; {this.props.editMessage(this.props.message, document.getElementById(this.props.messageKey).value)}}}>Submit</button>
-          <button type='button' onClick={() =>{{this.handleClick()}; {this.props.deleteMessage(this.props.message)}}}>Delete</button>
+          <ModalBody className='modalContainer'>
+            <form>
+              <textarea className='formInput' rows='5' defaultValue={this.props.messageContent} id={this.props.messageKey}/>
+            </form>
+            <div>
+              <Button className='modalButton' onClick={() =>{this.handleClick(); this.props.editMessage(this.props.message, document.getElementById(this.props.messageKey).value)}}>Submit</Button>
+            </div>
+            <Button className='deleteButton' onClick={() =>{this.handleClick(); this.props.deleteMessage(this.props.message, this.props.index)}}>Delete</Button>
           </ModalBody>
         </Modal>
       </div>

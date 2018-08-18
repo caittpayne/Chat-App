@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { Container, Row, Col, Button } from 'reactstrap';
 import './main.css';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 
 class SignIn extends Component {
@@ -50,7 +49,7 @@ hideGreetings() {
 
   render() {
     return(
-      <Container className={this.props.hideLogin} id='landing' fluid='true'>
+      <Container fluid className={this.props.hideLogin} id='landing'>
         <Container id='greetings'>
           <Row className='align-items-center greetContainer'>
             <Col lg='12'>

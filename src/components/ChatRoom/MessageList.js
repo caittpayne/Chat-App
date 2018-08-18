@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Container, Row, Col, Button, Input, Form, FormGroup } from 'reactstrap';
 import ModalMessage from './Modal/ModalMessage';
 import './main.css';
 
@@ -8,7 +9,6 @@ class MessageList extends Component {
 
     this.state= {
       messages: [],
-      edit: 'hideEdit'
     }
 
     this.messagesRef = this.props.firebase
@@ -35,10 +35,6 @@ class MessageList extends Component {
         document.getElementById('newText').value='';
       }
 
-      openEdit() {
-        this.setState({ edit: 'showEdit' })
-      }
-
       editMessage(message, data) {
         const newArr = [...this.state.messages];
         const index = newArr.indexOf(message);
@@ -55,6 +51,7 @@ class MessageList extends Component {
         this.messagesRef.child(message.key).remove();
         newList.splice(index, 1);
         this.setState({ messages: newList });
+
       }
 
       formatTime(time) {
@@ -77,48 +74,67 @@ class MessageList extends Component {
         else if (hh === 0) {
           h = 12;
         }
-        time = yyyy + '-' + mm + '-' + dd + ','+ ' ' + h + ':' + min + ' ' + ampm;
+        time = `${yyyy}-${mm}-${dd}, ${h}:${min} ${ampm}`;
 
         return time;
       }
 
     render() {
       return (
-        <section>
-          <section className={this.props.activeRoom === 'undefined' ? 'hide' : 'roomName'}>
-            <h2>{this.props.activeRoomName}</h2>
-          </section>
-          <section className='messageList'>
-          {
-            this.state.messages
+        <div>
+        <Container fluid id='messageContainer'>
+              {this.state.messages
               .filter(message => message.roomId === this.props.activeRoomId)
               .map((message, index) =>
-                <div key={index}>
-                  <p>{message.username}</p>
-                  <p>{message.content}</p>
-                  <p>{this.formatTime(message.sentAt)}</p>
-                  <div>
-                    <section className='editMessage'>
-                      <ModalMessage
-                        message={message}
-                        messageKey={message.key}
-                        messageContent={message.content}
-                        editMessage={() => this.editMessage(message, document.getElementById(message.key).value)} />
-                    </section>
-                  </div>
-                </div>
-                )
-              }
-          </section>
-          <section>
-            <form>
-              <input type='text' id='newText'/>
-              <button type='button' onClick={() => this.sendMessage(document.getElementById('newText').value)}>Send</button>
-            </form>
-          </section>
-        </section>
-      )
-    }
+                <Row key={index} className='messageRow'>
+                  <Col>
+                    <Row>
+                      <Col sm='1'>
+                        <img src={this.props.user.photoURL} className='userPhoto' alt='User profile' />
+                      </Col>
+                      <Col sm='9'>
+                        <h6 id='username'>{message.username}</h6>
+                        <p className='content'>{message.content}</p>
+                      </Col>
+                      <Col sm='2'>
+                        <p className='content'>{this.formatTime(message.sentAt)}</p>
+                      </Col>
+                    </Row>
+                    <Row>
+                      <Col sm={{size: 1, offset: 11}}>
+                        <ModalMessage
+                          message={message}
+                          index={index}
+                          messageKey={message.key}
+                          messageContent={message.content}
+                          editMessage={() => this.editMessage(message, document.getElementById(message.key).value)}
+                          deleteMessage={() => this.deleteMessage(message, index)} />
+                      </Col>
+                    </Row>
+                  </Col>
+                </Row>
+              )
+          }
+          </Container>
+          <Container id='sendContainer'>
+          <Row>
+            <Col>
+              <Form>
+                <FormGroup row>
+                  <Col sm={10}>
+                    <Input type='text' id='newText'/>
+                  </Col>
+                  <Col sm={2}>
+                    <Button id='sendButton' onClick={() => this.sendMessage(document.getElementById('newText').value)}>Send</Button>
+                  </Col>
+                </FormGroup>
+              </Form>
+            </Col>
+          </Row>
+    </Container>
+    </div>
+    )
+  }
 }
 
 export default MessageList;
