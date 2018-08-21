@@ -1,7 +1,6 @@
 
 import React, { Component } from 'react';
 import * as firebase from 'firebase';
-import Key from './config.js';
 import SignIn from './components/SignIn/SignIn';
 import ChatRoom from './components/ChatRoom/ChatRoom';
 import './App.css';
@@ -25,9 +24,34 @@ class App extends Component {
     this.state={
       user: '',
       hideChatRoom: 'hide',
-      hideSignIn: 'show'
+      hideSignIn: 'show',
+      userList: []
     }
 
+    this.usersRef = firebase.database().ref('users');
+
+  }
+
+  componentDidMount() {
+    this.usersRef.on('child_added', snapshot => {
+      const user = snapshot.val();
+      user.key = snapshot.key;
+      this.setState({ userList: this.state.userList.concat( user )})
+    });
+  }
+
+  createUser(userName, userPhoto) {
+    for(let i = 0; i < this.state.userList.length; i++) {
+      if(this.state.userList[i].displayName === userName) {
+        console.log('already a user')
+        return true;
+      }
+    }
+    this.usersRef.push({
+         admin: 'false',
+         displayName: userName,
+         photoURL: userPhoto
+       });
   }
 
   signIn() {
@@ -56,6 +80,7 @@ class App extends Component {
             hideSignIn: 'show'
           })
         }
+        this.createUser(user.displayName, user.photoURL);
   }
 
   render() {

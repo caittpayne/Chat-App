@@ -79,10 +79,35 @@ class MessageList extends Component {
         return time;
       }
 
+      pickARoom() {
+        if(this.props.activeRoomId === 'undefined') {
+          return 'show';
+        }
+        else {
+           return 'hide';
+         }
+      }
+
+      disableSend() {
+        if(this.props.activeRoomId === 'undefined' ) {
+          return true;
+        }
+        else {
+
+          return false;
+        }
+      }
+
     render() {
       return (
         <div>
         <Container fluid id='messageContainer'>
+          <Row className={`align-items-center chooseARoom ${this.pickARoom()}`}>
+            <Col lg='12'>
+              <i className='far fa-comment fa-10x'/>
+              <h2>Choose a Channel</h2>
+            </Col>
+          </Row>
               {this.state.messages
               .filter(message => message.roomId === this.props.activeRoomId)
               .map((message, index) =>
@@ -125,7 +150,11 @@ class MessageList extends Component {
                     <Input type='text' id='newText'/>
                   </Col>
                   <Col sm={2}>
-                    <Button id='sendButton' onClick={() => this.sendMessage(document.getElementById('newText').value)}>Send</Button>
+                    <Button
+                      disabled={this.disableSend()}
+                      active id='sendButton'
+                      onClick={() => this.sendMessage(document.getElementById('newText').value)}
+                      >Send</Button>
                   </Col>
                 </FormGroup>
               </Form>
