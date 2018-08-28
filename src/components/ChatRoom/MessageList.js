@@ -29,7 +29,8 @@ class MessageList extends Component {
           content: newMessage,
           roomId: this.props.activeRoomId,
           sentAt: this.props.firebase.database.ServerValue.TIMESTAMP,
-          username: this.props.user.displayName
+          username: this.props.user.displayName,
+          photoURL: this.props.user.photoURL
         });
 
         document.getElementById('newText').value='';
@@ -115,7 +116,7 @@ class MessageList extends Component {
                   <Col>
                     <Row>
                       <Col sm='1'>
-                        <img src={this.props.user.photoURL} className='userPhoto' alt='User profile' />
+                        <img src={message.photoURL} className='userPhoto' alt='User profile' />
                       </Col>
                       <Col sm='9'>
                         <h6 id='username'>{message.username}</h6>

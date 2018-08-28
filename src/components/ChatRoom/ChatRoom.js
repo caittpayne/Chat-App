@@ -31,13 +31,19 @@ class ChatRoom extends Component {
               user={this.props.user}
               hideChat={this.props.hideChat}
               signOut={() => this.props.signOut()}
+              userList={this.props.userList}
+              editUser={(checked, index, user) => this.props.editUser(checked, index, user)}
+              adminFunctions={() => this.props.adminFunctions()}
               />
 
               <RoomList
               firebase={this.props.firebase}
               user={this.props.user}
               activeRoomId={this.state.activeRoomId}
+              userList={this.props.userList}
               roomClick={(room, roomName) => this.roomClick(room, roomName)}
+              adminFunctions={() => this.props.adminFunctions()}
+              addUserRooms={(isPrivate) => this.props.addUserRooms(isPrivate)}
               />
           </Col>
           <Col sm='9' id='messages'>

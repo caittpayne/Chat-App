@@ -1,5 +1,5 @@
 import React, { Component }from 'react';
-import { Container, Button, Modal, ModalBody } from 'reactstrap';
+import { Button, Modal, ModalBody } from 'reactstrap';
 import './main.css';
 
 class ModalMessage extends Component {

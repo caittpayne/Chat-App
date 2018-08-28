@@ -22,14 +22,16 @@ class RoomList extends Component {
       const room = snapshot.val();
       room.key = snapshot.key;
       this.setState({ rooms: this.state.rooms.concat( room )})
+      this.props.addUserRooms(room);
     });
   }
 
-  createRooms(newRoomName) {
+  createRooms(newRoomName, isPrivate) {
     this.roomsRef.push({
-      name: newRoomName
+      name: newRoomName,
+      isPrivate: isPrivate
     });
-    document.getElementById('new').value='';
+    document.getElementById('newRoom').value='';
   }
 
   editRooms(room, data) {
@@ -61,11 +63,9 @@ class RoomList extends Component {
   roomHovered(index) {
       if(this.state.roomHovered ===  index) {
         return 'fadeIn';
-        console.log('fadeIn')
       }
       else {
         return 'fadeOutEdit';
-        console.log('fadeout')
       }
    }
 
@@ -82,6 +82,29 @@ class RoomList extends Component {
      }
    }
 
+    ifPrivate(room) {
+      if(this.props.user) {
+        const users = this.props.userList;
+        for(let i = 0; i < users.length; i++) {
+          let user = users[i];
+          if(user.displayName === this.props.user.displayName) {
+            const arr = [];
+            for(var key in user.rooms) {
+              var thisRoom = user.rooms[key].key;
+              arr.push(thisRoom);
+            }
+            return arr.includes(room.key) || room.isPrivate === false;
+        }
+      }
+   }
+ }
+
+ privateIndicator(room) {
+   if(room.isPrivate === true) {
+     return ' *';
+   }
+ }
+
   render() {
     return (
       <Container id='roomList'>
@@ -89,10 +112,12 @@ class RoomList extends Component {
           <Col id='channels'><h4>Channels</h4></Col>
         </Row>
         {
-          this.state.rooms.map((room, index) =>
+          this.state.rooms
+          .filter(room => this.ifPrivate(room))
+          .map((room, index) =>
             <Row  className={this.highlightRoom(index)} key={index} onMouseEnter={() => this.showEdit(index)} onMouseLeave={() => this.hideEdit(index)}>
               <Col sm='10'>
-                <div onClick={() => {this.props.roomClick(room.key, room.name); this.activeRoom(index)}}>{room.name}</div>
+                <div onClick={() => {this.props.roomClick(room.key, room.name); this.activeRoom(index)}}>{room.name}{this.privateIndicator(room)}</div>
               </Col>
               <Col sm='2' className={this.roomHovered(index)}>
                 <ModalEditRoom
@@ -102,6 +127,7 @@ class RoomList extends Component {
                   roomKey={room.key}
                   editRooms={() => this.editRooms(room, document.getElementById(room.key).value)}
                   deleteRooms={() => this.deleteRooms(room, index)}
+                  adminFunctions={() => this.props.adminFunctions()}
                 />
               </Col>
             </Row>
@@ -109,7 +135,11 @@ class RoomList extends Component {
         }
         <Row>
           <Col>
-            <ModalAddRoom createRooms={() => this.createRooms(document.getElementById('new').value)}/>
+            <ModalAddRoom
+              createRooms={() => this.createRooms(document.getElementById('newRoom').value, document.getElementById('privateCheckbox').checked)}
+              userList={this.props.userList}
+              adminFunctions={() => this.props.adminFunctions()}
+              />
           </Col>
         </Row>
       </Container>
