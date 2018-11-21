@@ -13,14 +13,12 @@ Additional features include editing messages and rooms, assigning admin users, a
 
 ![Create a Room](./public/assets/create_room.png?raw=true)
 
-![Admin Functions](./public/assets/features.png?raw=true)
-
-![Add Admin Users](./public/assets/admin.png?raw=true)
 
 ## Built With <a id="built-with"></a>
 
 * React
 * Firebase
+* React Router
 * Reactstrap
 
 ## Motivation <a id="motivation"></a>
